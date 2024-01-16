@@ -1,11 +1,42 @@
 import { signal } from "@preact/signals-react";
 import background from "../../assets/background.jpg";
 import { useSignals } from "@preact/signals-react/runtime";
+import { useMutation } from "@tanstack/react-query";
+import { userLogin } from "../../api/authApi";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
-const email = signal(1);
+const loginData = signal({
+  username: "",
+  password: "",
+});
 
 function LoginPage() {
   useSignals();
+
+  // Navigate
+  const navigate = useNavigate();
+
+  // On change events for textbox
+  const handleChange = (e) => {
+    loginData.value = { ...loginData.value, [e.target.name]: e.target.value };
+    // console.log(loginData.value)
+  };
+
+  const [cookie, setCookie] = useCookies(["account"]);
+
+  const loginMutation = useMutation({
+    mutationFn: userLogin,
+    onSuccess: (data) => {
+      setCookie("account", JSON.stringify(data));
+      navigate("/");
+    },
+  });
+
+  const handleLogin = () => {
+    loginMutation.mutate(loginData);
+    console.log("login btn clicked!");
+  };
   return (
     <div
       className="w-full min-h-screen bg-black overflow-hidden flex items-center justify-center flex-col gap-5"
@@ -21,20 +52,28 @@ function LoginPage() {
         <p className="text-white font-bold text-2xl">Login</p>
         <input
           type="text"
-          placeholder="Enter your Email address"
+          placeholder="Enter your Username"
+          onChange={handleChange}
+          name="username"
+          value={loginData.value.username}
           className="py-1 px-2 shadow-md rounded-sm"
         />
         <input
           type="password"
-          placeholder="Enter your password"
+          name="password"
+          value={loginData.value.password}
+          onChange={handleChange}
+          placeholder="Enter your Password"
           className="py-1 px-2 shadow-md rounded-sm"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleLogin();
+            }
+          }}
         />
         <button
           className="bg-blue-300 px-5 py-2 rounded-sm"
-          onClick={() => {
-            email.value = email.value + 1;
-            console.log(email.value);
-          }}
+          onClick={handleLogin}
         >
           Login
         </button>

@@ -2,11 +2,13 @@ import { signal } from "@preact/signals-react";
 import Dropdown from "../../../components/Dropdown";
 import DropdownSearch from "../../../components/DropdownSearch";
 import { useSignals } from "@preact/signals-react/runtime";
+// import { useCookies } from "react-cookie";
 
 const watsonsConsignor = signal(true);
 
 function CreateTransactionPage() {
   useSignals();
+ 
   return (
     <div className="flex-1 flex flex-col gap-4">
       <div className="flex justify-between">

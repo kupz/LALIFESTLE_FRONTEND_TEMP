@@ -1,31 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { getTransactions } from "../../../api/transactionApi";
-import {
-  convertToPositive,
-  formatNumberWithCommas,
-  fromUTCtoManila,
-} from "../../../services/utils";
-import TransactionItem from "../../../components/TransactionItem";
+import React from "react";
+import { getProducts } from "../../../api/productsApi";
+import ProductItem from "../../../components/ProductItem";
 
-function DeliveryPage() {
-  // params
-  const [params, setParams] = useState({
-    transaction_type: "Delivery",
-    page: 1,
-    limit: 50,
-  });
-
-  // query for transactions
-  const { data, isSuccess } = useQuery({
-    queryKey: ["transactions", params],
-    queryFn: () => getTransactions(params),
-  });
-
+function Products() {
+  const { data } = useQuery({ queryKey: ["products"], queryFn: getProducts });
   return (
     <div className="w-full h-full flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <p className="font-bold text-white/60">Delivery</p>
+        <p className="font-bold text-white/60">Products</p>
         <input
           type="text"
           placeholder="Search"
@@ -36,21 +19,16 @@ function DeliveryPage() {
         <table className="table-auto w-full border-spacing-y-5 border-separate">
           <thead>
             <tr className="bg-white/60 text-cyan-800">
-              <th>Transaction#</th>
-              <th>Prepared by</th>
-              <th>Remarks</th>
-              <th>Store</th>
-              <th>Total Qty</th>
-              <th>Total Cost</th>
-              <th>Date</th>
-              <th>Action</th>
+              <th>Itemcode</th>
+              <th>Brand by</th>
+              <th>Description</th>
+              <th>Variant</th>
+              <th>Price</th>
             </tr>
           </thead>
           <tbody>
             {data?.map((obj) => {
-              return (
-                <TransactionItem key={obj.id} data={obj} />
-              );
+              return <ProductItem key={obj.id} data={obj} />;
             })}
           </tbody>
         </table>
@@ -68,4 +46,4 @@ function DeliveryPage() {
   );
 }
 
-export default DeliveryPage;
+export default Products;
