@@ -10,21 +10,58 @@ function Dashboard() {
   const handleLogout = useLogout();
 
   const result = useCheckuser();
-  console.log(result);
+  // console.log(result);
   return (
     <main className="bg-cyan-800 min-h-screen w-full flex">
       <nav className="flex flex-col h-screen gap-5 p-5 overflow-y-auto">
         <p className="font-extrabold text-xl text-white/50">LA LIFESTYLE</p>
-        <NavLink to={'/'} className={`font-bold text-white/20`}>Overview</NavLink>
+        <NavLink
+          to={"/"}
+          className={({ isActive }) =>
+            isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+          }
+        >
+          Overview
+        </NavLink>
         <div className="flex flex-col gap-2">
           <p className="text-white/15 border-gray-400/30 text-xs border-b">
             Transactions
           </p>
-          <NavLink to={'/delivery'} className={`font-bold text-white/20`}>Delivery</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Received</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Pull-out</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Transfer</NavLink>
-          <NavLink to={'/createtransaction'} className={`font-bold text-white/20`}>
+          <NavLink
+            to={"/delivery"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Delivery
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Received
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Pull-out
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Transfer
+          </NavLink>
+          <NavLink
+            to={"/createtransaction"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
             Create Transaction
           </NavLink>
         </div>
@@ -32,17 +69,59 @@ function Dashboard() {
           <p className="text-white/15 border-gray-400/30 text-xs border-b">
             Inventory
           </p>
-          <NavLink className={`font-bold text-white/20`}>Stocks</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Reworks</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Disposal</NavLink>
+          <NavLink
+            to={"/stocks"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Stocks
+          </NavLink>
+          <NavLink
+            to={"reworks"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Reworks
+          </NavLink>
+          <NavLink
+            to={"disposals"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Disposal
+          </NavLink>
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-white/15 border-gray-400/30 text-xs border-b">
             Others
           </p>
-          <NavLink to={'/products'} className={`font-bold text-white/20`}>Products</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Stores</NavLink>
-          <NavLink className={`font-bold text-white/20`}>Brands</NavLink>
+          <NavLink
+            to={"/products"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Products
+          </NavLink>
+          <NavLink
+            to={"/stores"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Stores
+          </NavLink>
+          <NavLink
+            to={"/brands"}
+            className={({ isActive }) =>
+              isActive ? `font-bold text-white/80` : `font-bold text-white/20`
+            }
+          >
+            Brands
+          </NavLink>
         </div>
         <div className="flex flex-col gap-2 mt-auto">
           <p className="text-white/15 border-gray-400/30 text-xs border-b">

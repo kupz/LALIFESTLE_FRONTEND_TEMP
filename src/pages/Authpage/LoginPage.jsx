@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { userLogin } from "../../api/authApi";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const loginData = signal({
   username: "",
@@ -31,11 +32,11 @@ function LoginPage() {
       setCookie("account", JSON.stringify(data));
       navigate("/");
     },
+    onError: ()=> toast.error('Login Failed!')
   });
 
   const handleLogin = () => {
     loginMutation.mutate(loginData);
-    console.log("login btn clicked!");
   };
   return (
     <div

@@ -1,26 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { getProducts } from "../../../api/productsApi";
-import ProductItem from "./ProductItem";
 import { signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
+import BrandItem from "./BrandItem";
+import { getBrands } from "../../../api/brandApi";
 
 const searchKey = signal("");
 
-function Products() {
+function Brands() {
   useSignals();
-  const { data } = useQuery({ queryKey: ["products"], queryFn: getProducts });
-  const filteredData = data?.filter(
-    (item) =>
-      item.code.includes(searchKey.value.toUpperCase()) ||
-      item.description.includes(searchKey.value.toUpperCase()) ||
-      item.brand__name.includes(searchKey.value.toUpperCase()) ||
-      item.variant.includes(searchKey.value.toUpperCase())
+  const { data } = useQuery({ queryKey: ["brands"], queryFn: getBrands });
+
+  const filteredData = data?.filter((item) =>
+    item.name.includes(searchKey.value.toUpperCase())
   );
   return (
     <div className="w-full h-full flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <p className="font-bold text-white/60">Products</p>
+        <p className="font-bold text-white/60">Brands</p>
         <input
           type="text"
           placeholder="Search"
@@ -33,17 +30,13 @@ function Products() {
         <table className="table-auto w-full border-spacing-y-5 border-separate">
           <thead>
             <tr className="bg-white/60 text-cyan-800">
-              <th>Itemcode</th>
-              <th>Brand by</th>
-              <th>Description</th>
-              <th>Variant</th>
-              <th>Price</th>
+              <th>Brand Name</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {filteredData?.map((obj) => {
-              return <ProductItem key={obj.id} data={obj} />;
+              return <BrandItem key={obj.id} data={obj} />;
             })}
           </tbody>
         </table>
@@ -55,4 +48,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default Brands;

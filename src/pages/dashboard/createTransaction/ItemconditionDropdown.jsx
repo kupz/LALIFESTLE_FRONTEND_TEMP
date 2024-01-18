@@ -5,7 +5,7 @@ const dropdown = signal(false);
 
 const inputValue = signal("");
 
-function Dropdown({ options, selectedValue, placeholderValue }) {
+function ItemconditionDropdown({ options, selectedValue, placeholderValue }) {
   useSignals();
   const handleClick = () => {
     dropdown.value = !dropdown.value;
@@ -45,4 +45,4 @@ function Dropdown({ options, selectedValue, placeholderValue }) {
   );
 }
 
-export default Dropdown;
+export default ItemconditionDropdown;

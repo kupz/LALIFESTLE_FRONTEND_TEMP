@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  convertToPositive,
-  formatNumberWithCommas,
-  fromUTCtoManila,
-} from "../services/utils";
+import { formatNumberWithCommas } from "../../../services/utils";
 
 function ProductItem({ data }) {
   return (
@@ -12,12 +8,12 @@ function ProductItem({ data }) {
         data.is_void ? "text-red-400" : "text-white/50"
       } hover:bg-cyan-900`}
     >
-      <td>{data.id}</td>
-      <td>Admin</td>
-
-      <td className="text-xl cursor-pointer relative">
-        <p>Edit</p>
-      </td>
+      <td>{data.code}</td>
+      <td>{data.brand__name}</td>
+      <td>{data.description}</td>
+      <td>{data.variant}</td>
+      <td>{formatNumberWithCommas(data.price)}</td>
+      <td>⚙</td>
     </tr>
   );
 }

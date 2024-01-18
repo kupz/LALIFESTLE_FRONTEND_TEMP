@@ -12,6 +12,13 @@ import CreateTransactionPage from "./pages/dashboard/createTransaction/index.jsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PrivateRouteHOC from "./pages/HOC/PrivateRouteHOC.jsx";
 import Products from "./pages/dashboard/products/index.jsx";
+import Stores from "./pages/dashboard/stores/index.jsx";
+import Brands from "./pages/dashboard/brands/index.jsx";
+import Stocks from "./pages/dashboard/stocks/Stocks.jsx";
+import Reworks from "./pages/dashboard/stocks/Reworks.jsx";
+import Disposals from "./pages/dashboard/stocks/Disposals.jsx";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const PrivateRoute = PrivateRouteHOC(Dashboard);
 
@@ -37,8 +44,28 @@ const router = createBrowserRouter([
         element: <CreateTransactionPage />,
       },
       {
+        path: "/stocks",
+        element: <Stocks />,
+      },
+      {
+        path: "/reworks",
+        element: <Reworks />,
+      },
+      {
+        path: "/disposals",
+        element: <Disposals />,
+      },
+      {
         path: "/products",
         element: <Products />,
+      },
+      {
+        path: "/stores",
+        element: <Stores />,
+      },
+      {
+        path: "/brands",
+        element: <Brands />,
       },
     ],
   },
@@ -51,5 +78,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <RouterProvider router={router}>
       <App />
     </RouterProvider>
+    <ToastContainer />
   </QueryClientProvider>
 );

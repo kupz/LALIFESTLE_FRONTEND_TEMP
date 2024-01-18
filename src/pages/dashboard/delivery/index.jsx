@@ -14,6 +14,7 @@ function DeliveryPage() {
     transaction_type: "Delivery",
     page: 1,
     limit: 50,
+    filter: "",
   });
 
   // query for transactions
@@ -29,6 +30,12 @@ function DeliveryPage() {
         <input
           type="text"
           placeholder="Search"
+          value={params.filter}
+          onChange={(e) =>
+            setParams((prev) => {
+              return { ...prev, filter: e.target.value };
+            })
+          }
           className="px-2 py-1 rounded-md"
         />
       </div>
@@ -48,9 +55,7 @@ function DeliveryPage() {
           </thead>
           <tbody>
             {data?.map((obj) => {
-              return (
-                <TransactionItem key={obj.id} data={obj} />
-              );
+              return <TransactionItem key={obj.id} data={obj} />;
             })}
           </tbody>
         </table>
@@ -59,7 +64,7 @@ function DeliveryPage() {
         <button className="font-bold bg-cyan-900 px-4 py-1 rounded-md text-white/50 text-xs">
           PREV
         </button>
-        <p className="font-bold">Page 1</p>
+        <p className="font-bold">Page {params.page}</p>
         <button className="font-bold bg-cyan-900 px-4 py-1 rounded-md text-white/50 text-xs">
           NEXT
         </button>

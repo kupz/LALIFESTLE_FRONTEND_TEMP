@@ -7,13 +7,13 @@ function PrivateRouteHOC(Component) {
   return function ValidateUser() {
     // get usertoken if there is
     const userToken = useToken();
-    console.log(userToken);
+    // console.log(userToken);
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     if (userToken) {
       test_token(userToken).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res) {
           setIsAuthenticated(true);
         }
