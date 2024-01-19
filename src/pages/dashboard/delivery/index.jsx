@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { getTransactions } from "../../../api/transactionApi";
 import {
   convertToPositive,
@@ -9,6 +9,8 @@ import {
 import TransactionItem from "../../../components/TransactionItem";
 
 function DeliveryPage() {
+  // queryClient
+  const queryClient = useQueryClient();
   // params
   const [params, setParams] = useState({
     transaction_type: "Delivery",
