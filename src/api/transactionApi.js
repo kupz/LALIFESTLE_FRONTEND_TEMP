@@ -60,3 +60,39 @@ export const addTransaction = async (postData) => {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
 };
+
+// get transaction detail
+export const getTransactionDetail = async (id) => {
+  const response = await fetch(
+    `${wmsApi}/transactions/detail/${encodeURIComponent(id)}`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (response.ok) {
+    const result = await response.json();
+    return result.data;
+  } else {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+};
+
+// VOID transaction
+export const voidTransaction = async (postData) => {
+  console.log(JSON.stringify(postData));
+  const response = await fetch(`${wmsApi}/transactions/void`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    return result;
+  } else {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+};

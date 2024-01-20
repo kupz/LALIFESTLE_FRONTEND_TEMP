@@ -4,9 +4,27 @@ import {
   formatNumberWithCommas,
   fromUTCtoManila,
 } from "../services/utils";
+import { transactionDetailModalData } from "./TransactionDetailModal";
+import { TransactionDetailViewModal } from "../pages/dashboard";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { voidTransaction } from "../api/transactionApi";
+import { toast } from "react-toastify";
+import { printData } from "../pages/dashboard/Print";
+import { useNavigate } from "react-router-dom";
 
 function TransactionItem({ data }) {
   const [menu, setMenu] = useState(false);
+  const navigate = useNavigate()
+
+  const queryClient = useQueryClient();
+
+  const voidMutation = useMutation({
+    mutationFn: voidTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries("transactions");
+      toast("Transaction has been voided!");
+    },
+  });
   return (
     <tr
       className={`text-center font-semibold ${
@@ -31,10 +49,33 @@ function TransactionItem({ data }) {
         {menu && (
           <div className="absolute bg-cyan-300  z-10 rounded-md w-max -translate-x-[50%]">
             <ul className="text-sm flex flex-col cursor-pointer text-cyan-950">
-              <li className="hover:bg-cyan-500 px-2 py-1 rounded-md ">Print</li>
-              <li className="hover:bg-cyan-500 px-2 py-1 rounded-md ">View</li>
+              <li
+                className="hover:bg-cyan-500 px-2 py-1 rounded-md "
+                onClick={() => {
+                  printData.value = data;
+                  navigate('/print')
+                }}
+              >
+                Print
+              </li>
+              <li
+                className="hover:bg-cyan-500 px-2 py-1 rounded-md "
+                onClick={() => {
+                  TransactionDetailViewModal.value = true;
+                  transactionDetailModalData.value = data;
+                  setMenu(!menu);
+                }}
+              >
+                View
+              </li>
               <li className="hover:bg-cyan-500 px-2 py-1 rounded-md ">Edit</li>
-              <li className="hover:bg-cyan-500 px-2 py-1 rounded-md ">
+              <li
+                className="hover:bg-cyan-500 px-2 py-1 rounded-md "
+                onClick={() => {
+                  voidMutation.mutate({ id: data.id });
+                  setMenu(!menu);
+                }}
+              >
                 Void/Unvoid
               </li>
             </ul>

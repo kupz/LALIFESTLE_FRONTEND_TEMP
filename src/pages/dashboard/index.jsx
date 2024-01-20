@@ -3,9 +3,15 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import useCheckuser from "../../hooks/useToken";
 import useLogout from "../../hooks/useLogout";
+import TransactionDetailModal from "../../components/TransactionDetailModal";
+import { signal } from "@preact/signals-react";
+import { useSignals } from "@preact/signals-react/runtime";
+
+export const TransactionDetailViewModal = signal(false);
 
 function Dashboard() {
-  const [cookies, removeCookie] = useCookies(["account"]);
+  useSignals();
+  // const [cookies, removeCookie] = useCookies(["account"]);
 
   const handleLogout = useLogout();
 
@@ -142,6 +148,7 @@ function Dashboard() {
       <section className="flex-1 border-gray-400/30 border-l p-5 overflow-y-auto flex flex-col">
         <Outlet />
       </section>
+      {TransactionDetailViewModal.value && <TransactionDetailModal />}
     </main>
   );
 }

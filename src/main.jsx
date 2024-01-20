@@ -22,6 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ReceivedPage from "./pages/dashboard/receivedPage/index.jsx";
 import TransferPage from "./pages/dashboard/transferPage/index.jsx";
 import PulloutPage from "./pages/dashboard/pulloutPage/index.jsx";
+import PrintableContent from "./pages/dashboard/Print/index.jsx";
 
 const PrivateRoute = PrivateRouteHOC(Dashboard);
 
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: "/brands",
         element: <Brands />,
+      },
+      {
+        path: "/print",
+        element: <PrintableContent />,
       },
     ],
   },

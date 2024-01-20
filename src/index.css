@@ -36,3 +36,12 @@ input {
 ::-webkit-scrollbar-track {
   background-color: #f2f2f2;
 }
+
+.a4-page {
+  width: 210mm;
+  height: 297mm;
+  /* padding: 20mm;
+  margin: 10mm; */
+  /* page-break-inside: avoid;
+  page-break-before: always; */
+}
