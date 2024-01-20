@@ -19,6 +19,9 @@ import Reworks from "./pages/dashboard/stocks/Reworks.jsx";
 import Disposals from "./pages/dashboard/stocks/Disposals.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import ReceivedPage from "./pages/dashboard/receivedPage/index.jsx";
+import TransferPage from "./pages/dashboard/transferPage/index.jsx";
+import PulloutPage from "./pages/dashboard/pulloutPage/index.jsx";
 
 const PrivateRoute = PrivateRouteHOC(Dashboard);
 
@@ -38,6 +41,18 @@ const router = createBrowserRouter([
       {
         path: "/delivery",
         element: <DeliveryPage />,
+      },
+      {
+        path: "/received",
+        element: <ReceivedPage />,
+      },
+      {
+        path: "/transfer",
+        element: <TransferPage />,
+      },
+      {
+        path: "/pullout",
+        element: <PulloutPage />,
       },
       {
         path: "/createtransaction",

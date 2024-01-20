@@ -42,3 +42,21 @@ export const getTransactionType = async () => {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
 };
+
+// Add new Transaction
+export const addTransaction = async (postData) => {
+  const response = await fetch(`${wmsApi}/transactions/addtransaction`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    return result;
+  } else {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+};

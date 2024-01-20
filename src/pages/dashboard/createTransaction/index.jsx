@@ -2,16 +2,24 @@ import { signal } from "@preact/signals-react";
 import Dropdown from "../../../components/Dropdown";
 import DropdownSearch from "../../../components/DropdownSearch";
 import { useSignals } from "@preact/signals-react/runtime";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import { useCookies } from "react-cookie";
 import { getStores } from "../../../api/storesApi";
-import { getTransactionType } from "../../../api/transactionApi";
+import {
+  addTransaction,
+  getTransactionType,
+} from "../../../api/transactionApi";
 import { getProductConditions, getProducts } from "../../../api/productsApi";
 import ItemcodeSearch from "../../../components/ItemCodeSearch";
 import ItemconditionDropdown from "./ItemconditionDropdown";
 import TransactionItem from "./TransactionItem";
 import { toast } from "react-toastify";
-import { formatNumberWithCommas } from "../../../services/utils";
+import {
+  convertToNegative,
+  formatNumberWithCommas,
+} from "../../../services/utils";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const watsonsConsignor = signal(true);
 
@@ -27,6 +35,9 @@ export const clearItemcode = signal(false);
 
 function CreateTransactionPage() {
   useSignals();
+
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // get stores from server
   const { data: stores } = useQuery({
@@ -52,6 +63,16 @@ function CreateTransactionPage() {
     queryFn: getProductConditions,
   });
 
+  // add transaction mutation
+  const addTransactionMutation = useMutation({
+    mutationFn: addTransaction,
+    onSuccess: () => {
+      toast("transaction successfully added!");
+      queryClient.invalidateQueries("transactions");
+      navigate("/delivery");
+    },
+  });
+
   // Handle add to cart
   const addtocart = (e) => {
     if (e.key === "Enter") {
@@ -75,6 +96,35 @@ function CreateTransactionPage() {
     }
   };
 
+  // create ref for remarks
+  const remarksRef = useRef(null);
+
+  // handle submit
+  const handleSubmit = () => {
+    const postData = {
+      store: selectedStore.value.name,
+      transaction_type: selectedTransactionType.value.name,
+      remarks: remarksRef.current.value,
+      items: cart.value.map((item) => {
+        return {
+          item_id: item.id,
+          qty:
+            selectedTransactionType.value.name === "Delivery"
+              ? convertToNegative(parseInt(item.quantity))
+              : parseInt(item.quantity),
+          item_condition: item.item_condition,
+          price: item.price,
+        };
+      }),
+    };
+
+    if (!cart.value.length < 1) {
+      addTransactionMutation.mutate(postData);
+    } else {
+      toast.error("No Product selected to process this transaction");
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col gap-4">
       <div className="flex justify-between">
@@ -84,17 +134,18 @@ function CreateTransactionPage() {
         <DropdownSearch
           selectedValue={selectedStore}
           options={stores}
-          placeholderValue={"Select Store (required)"}
+          placeholderValue={"Store Name"}
         />
         <Dropdown
           key="transactionType"
-          placeholderValue={"Transaction type (required)"}
+          placeholderValue={"Select Transaction"}
           options={transactionTypes}
           selectedValue={selectedTransactionType}
         />
         <input
           type="text"
           placeholder="Remarks"
+          ref={remarksRef}
           className="px-2 py-1 rounded-md"
         />
         <div className="flex items-center gap-2">
@@ -112,7 +163,7 @@ function CreateTransactionPage() {
       <div className="flex gap-4">
         <ItemconditionDropdown
           key={"conditions"}
-          placeholderValue={"Select Product Condition (required)"}
+          placeholderValue={"Select Product Condition"}
           options={itemConditions}
           selectedValue={selectedCondition}
         />
@@ -130,6 +181,13 @@ function CreateTransactionPage() {
           value={quantity.value}
           onChange={(e) => (quantity.value = e.target.value)}
         />
+        <button
+          className="px-5 py-1 bg-cyan-400 rounded-md text-white font-semibold"
+          onClick={handleSubmit}
+          disabled={addTransactionMutation.isPending}
+        >
+          Submit
+        </button>
       </div>
 
       <div className="h-full overflow-y-auto w-full">

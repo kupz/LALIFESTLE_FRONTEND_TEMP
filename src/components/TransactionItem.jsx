@@ -14,7 +14,7 @@ function TransactionItem({ data }) {
       } hover:bg-cyan-900`}
     >
       <td>{data.id}</td>
-      <td>Admin</td>
+      <td>{data.user__username}</td>
       <td>{data.remarks}</td>
       <td>{data.store__name}</td>
       <td>{formatNumberWithCommas(convertToPositive(data.total_qty))}</td>

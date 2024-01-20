@@ -4,11 +4,11 @@ import { getTransactions } from "../../../api/transactionApi";
 
 import TransactionItem from "../../../components/TransactionItem";
 
-function DeliveryPage() {
+function PulloutPage() {
   // queryClient
   // params
   const [params, setParams] = useState({
-    transaction_type: "Delivery",
+    transaction_type: "Pull-out",
     page: 1,
     limit: 50,
     filter: "",
@@ -56,7 +56,7 @@ function DeliveryPage() {
   return (
     <div className="w-full h-full flex flex-col gap-4 ">
       <div className="flex justify-between">
-        <p className="font-bold text-white/60">Delivery</p>
+        <p className="font-bold text-white/60">Pull-out</p>
         <input
           type="text"
           placeholder="Search"
@@ -105,4 +105,4 @@ function DeliveryPage() {
   );
 }
 
-export default DeliveryPage;
+export default PulloutPage;

@@ -25,7 +25,7 @@ function Dropdown({ options, selectedValue, placeholderValue }) {
         </p>
       </div>
       {dropdown.value && (
-        <ul className="bg-cyan-900 text-white/50 p-2 overflow-y-auto max-h-[200px] absolute w-full ">
+        <ul className="bg-cyan-900 text-white/50 p-2 overflow-y-auto max-h-[200px] absolute w-full z-20">
           {options?.map((obj) => (
             <li
               key={obj.id}

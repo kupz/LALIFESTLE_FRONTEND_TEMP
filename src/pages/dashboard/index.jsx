@@ -36,6 +36,7 @@ function Dashboard() {
             Delivery
           </NavLink>
           <NavLink
+            to={"/received"}
             className={({ isActive }) =>
               isActive ? `font-bold text-white/80` : `font-bold text-white/20`
             }
@@ -43,6 +44,7 @@ function Dashboard() {
             Received
           </NavLink>
           <NavLink
+            to={"/pullout"}
             className={({ isActive }) =>
               isActive ? `font-bold text-white/80` : `font-bold text-white/20`
             }
@@ -50,6 +52,7 @@ function Dashboard() {
             Pull-out
           </NavLink>
           <NavLink
+            to={"transfer"}
             className={({ isActive }) =>
               isActive ? `font-bold text-white/80` : `font-bold text-white/20`
             }
