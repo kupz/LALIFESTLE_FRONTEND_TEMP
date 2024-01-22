@@ -23,6 +23,7 @@ import ReceivedPage from "./pages/dashboard/receivedPage/index.jsx";
 import TransferPage from "./pages/dashboard/transferPage/index.jsx";
 import PulloutPage from "./pages/dashboard/pulloutPage/index.jsx";
 import PrintableContent from "./pages/dashboard/Print/index.jsx";
+import UpdateTransaction from "./pages/dashboard/createTransaction/UpdateTransaction.jsx";
 
 const PrivateRoute = PrivateRouteHOC(Dashboard);
 
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: "/print",
         element: <PrintableContent />,
+      },
+      {
+        path: "/updatetransaction",
+        element: <UpdateTransaction />,
       },
     ],
   },

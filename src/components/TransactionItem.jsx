@@ -11,6 +11,7 @@ import { voidTransaction } from "../api/transactionApi";
 import { toast } from "react-toastify";
 import { printData } from "../pages/dashboard/Print";
 import { useNavigate } from "react-router-dom";
+import { transactionToUpdate } from "../pages/dashboard/createTransaction/UpdateTransaction";
 
 function TransactionItem({ data }) {
   const [menu, setMenu] = useState(false);
@@ -68,7 +69,10 @@ function TransactionItem({ data }) {
               >
                 View
               </li>
-              <li className="hover:bg-cyan-500 px-2 py-1 rounded-md ">Edit</li>
+              <li className="hover:bg-cyan-500 px-2 py-1 rounded-md " onClick={() => {
+                transactionToUpdate.value = data.id
+                navigate('/updateTransaction')
+              }}>Edit</li>
               <li
                 className="hover:bg-cyan-500 px-2 py-1 rounded-md "
                 onClick={() => {
