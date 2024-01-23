@@ -1,6 +1,6 @@
 import React from "react";
 import { formatNumberWithCommas } from "../../../services/utils";
-function TransactionItem({ data }) {
+function TransactionItem({ data, setCart , cart}) {
   return (
     <tr className="text-center font-semibold text-white/50 hover:bg-cyan-900 cursor-pointer">
       <td>{data.quantity}</td>
@@ -13,7 +13,11 @@ function TransactionItem({ data }) {
       <td className="text-xs">
         {formatNumberWithCommas(parseInt(data.price) * parseInt(data.quantity))}
       </td>
-      <td className="text-xs">X</td>
+      <td className="text-xs" onClick={()=>{
+        console.log('remove ', data.code)
+        console.log(cart)
+        setCart(cart.filter(item => item.code !== data.code))
+      }}>❌</td>
     </tr>
   );
 }

@@ -20,7 +20,7 @@ import {
   convertToPositive,
   formatNumberWithCommas,
 } from "../../../services/utils";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const watsonsConsignor = signal(true);
@@ -33,7 +33,7 @@ const quantity = signal("");
 
 export const transactionToUpdate = signal(null);
 
-const cart = signal([]);
+// const cart = signal([]);
 
 export const clearItemcode = signal(false);
 
@@ -43,6 +43,8 @@ export const clearItemcode = signal(false);
 
 function UpdateTransaction() {
   useSignals();
+
+  const [cart, setCart] = useState([]);
 
   const { data: transactionDetail, isLoading } = useQuery({
     queryKey: ["transactionDetail", transactionToUpdate.value],
@@ -62,10 +64,10 @@ function UpdateTransaction() {
         description: item.product__description,
         variant: item.product__variant,
         price: item.price,
-        item_condition: item.item_condition__name
+        item_condition: item.item_condition__name,
       };
     });
-    cart.value = prevData;
+    setCart(prevData);
   }
 
   const queryClient = useQueryClient();
@@ -108,7 +110,7 @@ function UpdateTransaction() {
   // Handle add to cart
   const addtocart = (e) => {
     if (e.key === "Enter") {
-      if (cart.value.some((item) => item.code === selectedItemcode.value.code))
+      if (cart.some((item) => item.code === selectedItemcode.value.code))
         toast.error("itemcode already exist!");
       else {
         if (selectedCondition.value) {
@@ -117,7 +119,7 @@ function UpdateTransaction() {
             item_condition: selectedCondition.value.name,
             quantity: quantity.value,
           };
-          cart.value = [newProduct, ...cart.value];
+          setCart([newProduct, ...cart])
           selectedItemcode.value = "";
           quantity.value = "";
           clearItemcode.value = true;
@@ -137,7 +139,7 @@ function UpdateTransaction() {
       store: selectedStore.value.name,
       transaction_type: selectedTransactionType.value.name,
       remarks: remarksRef.current.value,
-      items: cart.value.map((item) => {
+      items: cart.map((item) => {
         return {
           item_id: item.id,
           qty:
@@ -150,7 +152,7 @@ function UpdateTransaction() {
       }),
     };
 
-    if (!cart.value.length < 1) {
+    if (!cart.length < 1) {
       addTransactionMutation.mutate(postData);
     } else {
       toast.error("No Product selected to process this transaction");
@@ -241,8 +243,8 @@ function UpdateTransaction() {
             </tr>
           </thead>
           <tbody>
-            {cart.value.map((obj) => (
-              <TransactionItem key={obj.code} data={obj} />
+            {cart.map((obj) => (
+              <TransactionItem key={obj.code} data={obj} cart={cart} setCart={setCart} />
             ))}
           </tbody>
         </table>
@@ -250,7 +252,7 @@ function UpdateTransaction() {
       <div className="w-full bg-white/60 text-cyan-800 flex gap-5 px-5 py-2 items-center justify-between">
         <button className="font-bold bg-cyan-900 px-4 py-1 rounded-md text-white/50 text-xs">
           {formatNumberWithCommas(
-            cart.value.reduce(
+            cart.reduce(
               (accumulator, currentValue) =>
                 accumulator + parseInt(currentValue.quantity),
               0
@@ -260,7 +262,7 @@ function UpdateTransaction() {
         <p className="font-bold"></p>
         <button className="font-bold bg-cyan-900 px-4 py-1 rounded-md text-white/50 text-xs">
           {formatNumberWithCommas(
-            cart.value.reduce(
+            cart.reduce(
               (accumulator, currentValue) =>
                 accumulator +
                 parseFloat(currentValue.price * currentValue.quantity),

@@ -45,13 +45,17 @@ export const getTransactionType = async () => {
 
 // Add new Transaction
 export const addTransaction = async (postData) => {
+  console.log('this is inside api function', postData.token)
   const response = await fetch(`${wmsApi}/transactions/addtransaction`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Token ${postData.token}`,
     },
     body: JSON.stringify(postData),
   });
+
+  // console.log('from api',token)
 
   if (response.ok) {
     const result = await response.json();

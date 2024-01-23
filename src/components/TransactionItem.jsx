@@ -17,6 +17,8 @@ function TransactionItem({ data }) {
   const [menu, setMenu] = useState(false);
   const navigate = useNavigate()
 
+  console.log(data)
+
   const queryClient = useQueryClient();
 
   const voidMutation = useMutation({

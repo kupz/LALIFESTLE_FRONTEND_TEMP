@@ -18,8 +18,10 @@ import {
   convertToNegative,
   formatNumberWithCommas,
 } from "../../../services/utils";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import useToken from '../../../hooks/useToken'
 
 const watsonsConsignor = signal(true);
 
@@ -29,12 +31,15 @@ const selectedItemcode = signal("");
 const selectedCondition = signal(null);
 const quantity = signal("");
 
-const cart = signal([]);
+// const cart = signal([]);
 
 export const clearItemcode = signal(false);
 
 function CreateTransactionPage() {
   useSignals();
+  const token = useToken()
+
+  const [cart, setCart] = useState([])
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -76,7 +81,7 @@ function CreateTransactionPage() {
   // Handle add to cart
   const addtocart = (e) => {
     if (e.key === "Enter") {
-      if (cart.value.some((item) => item.code === selectedItemcode.value.code))
+      if (cart.some((item) => item.code === selectedItemcode.value.code))
         toast.error("itemcode already exist!");
       else {
         if (selectedCondition.value) {
@@ -85,7 +90,7 @@ function CreateTransactionPage() {
             item_condition: selectedCondition.value.name,
             quantity: quantity.value,
           };
-          cart.value = [newProduct, ...cart.value];
+          setCart([newProduct, ...cart])
           selectedItemcode.value = "";
           quantity.value = "";
           clearItemcode.value = true;
@@ -105,7 +110,7 @@ function CreateTransactionPage() {
       store: selectedStore.value.name,
       transaction_type: selectedTransactionType.value.name,
       remarks: remarksRef.current.value,
-      items: cart.value.map((item) => {
+      items: cart.map((item) => {
         return {
           item_id: item.id,
           qty:
@@ -118,12 +123,16 @@ function CreateTransactionPage() {
       }),
     };
 
-    if (!cart.value.length < 1) {
-      addTransactionMutation.mutate(postData);
+    if (!cart.length < 1) {
+      console.log('before passing the token', token)
+      const newData = {...postData, token: token}
+      addTransactionMutation.mutate(newData);
     } else {
       toast.error("No Product selected to process this transaction");
     }
   };
+
+  // console.log('Token',token)
 
   return (
     <div className="flex-1 flex flex-col gap-4">
@@ -206,8 +215,8 @@ function CreateTransactionPage() {
             </tr>
           </thead>
           <tbody>
-            {cart.value.map((obj) => (
-              <TransactionItem key={obj.code} data={obj} />
+            {cart.map((obj) => (
+              <TransactionItem key={obj.code} data={obj} setCart={setCart} cart={cart} />
             ))}
           </tbody>
         </table>
@@ -215,7 +224,7 @@ function CreateTransactionPage() {
       <div className="w-full bg-white/60 text-cyan-800 flex gap-5 px-5 py-2 items-center justify-between">
         <button className="font-bold bg-cyan-900 px-4 py-1 rounded-md text-white/50 text-xs">
           {formatNumberWithCommas(
-            cart.value.reduce(
+            cart.reduce(
               (accumulator, currentValue) =>
                 accumulator + parseInt(currentValue.quantity),
               0
@@ -225,7 +234,7 @@ function CreateTransactionPage() {
         <p className="font-bold"></p>
         <button className="font-bold bg-cyan-900 px-4 py-1 rounded-md text-white/50 text-xs">
           {formatNumberWithCommas(
-            cart.value.reduce(
+            cart.reduce(
               (accumulator, currentValue) =>
                 accumulator +
                 parseFloat(currentValue.price * currentValue.quantity),
