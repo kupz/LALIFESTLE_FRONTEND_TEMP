@@ -14,8 +14,8 @@ function TransactionItem({ data, setCart , cart}) {
         {formatNumberWithCommas(parseInt(data.price) * parseInt(data.quantity))}
       </td>
       <td className="text-xs" onClick={()=>{
-        console.log('remove ', data.code)
-        console.log(cart)
+        // console.log('remove ', data.code)
+        // console.log(cart)
         setCart(cart.filter(item => item.code !== data.code))
       }}>❌</td>
     </tr>

@@ -50,8 +50,8 @@ function TransactionDetailModal() {
                   <td>
                     {`${item.product__brand__name} ${item.product__description} - ${item.product__variant} (${item.item_condition__name})`}
                   </td>
-                  <td>399.00</td>
-                  <td>33,990.00</td>
+                  <td>{item.price}</td>
+                  <td>{item.price * convertToPositive(item.quantity)}</td>
                 </tr>
               );
             })}

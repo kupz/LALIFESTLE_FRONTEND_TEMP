@@ -155,7 +155,7 @@ function CreateTransactionPage() {
           type="text"
           placeholder="Remarks"
           ref={remarksRef}
-          className="px-2 py-1 rounded-md"
+          className="px-2 py-1 rounded-md bg-white"
         />
         <div className="flex items-center gap-2">
           <div
@@ -185,7 +185,7 @@ function CreateTransactionPage() {
         <input
           type="number"
           placeholder="Quantity"
-          className="px-2 py-1 rounded-md"
+          className="px-2 py-1 rounded-md bg-white "
           onKeyDown={addtocart}
           value={quantity.value}
           onChange={(e) => (quantity.value = e.target.value)}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { formatNumberWithCommas } from "../../../services/utils";
 
-function ProductItem({ data }) {
+function ProductItem({ data, setUpdateModal, setUpdateData, setdata }) {
   return (
     <tr
       className={`text-center font-semibold ${
@@ -13,7 +13,18 @@ function ProductItem({ data }) {
       <td>{data.description}</td>
       <td>{data.variant}</td>
       <td>{formatNumberWithCommas(data.price)}</td>
-      <td>⚙</td>
+      <td>
+        <span
+          className="cursor-pointer"
+          onClick={() => {
+            setUpdateModal(true);
+            setUpdateData(data);
+            setdata(data);
+          }}
+        >
+          ⚙
+        </span>
+      </td>
     </tr>
   );
 }

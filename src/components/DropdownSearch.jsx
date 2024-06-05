@@ -22,11 +22,11 @@ function DropdownSearch({ options, selectedValue, placeholderValue }) {
   );
 
   return (
-    <div className="relative w-min">
+    <div className="relative w-min bg-white rounded-md">
       <input
         type="text"
         placeholder={placeholderValue}
-        className="px-2 py-1 rounded-md"
+        className="px-2 py-1 rounded-md bg-transparent"
         value={inputValue}
         onChange={handleChange}
       />

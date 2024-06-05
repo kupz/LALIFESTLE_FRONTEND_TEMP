@@ -24,6 +24,7 @@ import TransferPage from "./pages/dashboard/transferPage/index.jsx";
 import PulloutPage from "./pages/dashboard/pulloutPage/index.jsx";
 import PrintableContent from "./pages/dashboard/Print/index.jsx";
 import UpdateTransaction from "./pages/dashboard/createTransaction/UpdateTransaction.jsx";
+import UpdateProduct from "./pages/dashboard/products/UpdateProduct.jsx";
 
 const PrivateRoute = PrivateRouteHOC(Dashboard);
 
@@ -31,10 +32,13 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+    errorElement: <h1>SOMETHING WENT WRONG!</h1>,
   },
   {
     path: "/",
     element: <PrivateRoute />,
+    // element: <Dashboard />,
+    errorElement: <h1>SOMETHING WENT WRONG!</h1>,
     children: [
       {
         path: "",
@@ -91,6 +95,10 @@ const router = createBrowserRouter([
       {
         path: "/updatetransaction",
         element: <UpdateTransaction />,
+      },
+      {
+        path: "/updateproduct",
+        element: <UpdateProduct />,
       },
     ],
   },

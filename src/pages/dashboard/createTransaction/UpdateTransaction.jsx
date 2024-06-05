@@ -9,6 +9,7 @@ import {
   addTransaction,
   getTransactionDetail,
   getTransactionType,
+  voidTransaction,
 } from "../../../api/transactionApi";
 import { getProductConditions, getProducts } from "../../../api/productsApi";
 import ItemcodeSearch from "../../../components/ItemCodeSearch";
@@ -20,8 +21,9 @@ import {
   convertToPositive,
   formatNumberWithCommas,
 } from "../../../services/utils";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useToken from "../../../hooks/useToken";
 
 const watsonsConsignor = signal(true);
 
@@ -44,6 +46,8 @@ export const clearItemcode = signal(false);
 function UpdateTransaction() {
   useSignals();
 
+  const token = useToken()
+
   const [cart, setCart] = useState([]);
 
   const { data: transactionDetail, isLoading } = useQuery({
@@ -51,24 +55,32 @@ function UpdateTransaction() {
     queryFn: () => getTransactionDetail(transactionToUpdate.value),
   });
 
-  if (isLoading) {
-    console.log("Loading");
-  } else {
-    const prevData = transactionDetail.items.map((item) => {
-      return {
-        ...item,
-        id: item.product__id,
-        code: item.product__code,
-        brand__name: item.product__brnad__name,
-        quantity: convertToPositive(item.quantity),
-        description: item.product__description,
-        variant: item.product__variant,
-        price: item.price,
-        item_condition: item.item_condition__name,
-      };
-    });
-    setCart(prevData);
-  }
+  const voidMutation = useMutation({
+    mutationFn: voidTransaction,
+    onSuccess: () => toast('previous transaction has been voided!')
+  })
+
+  useEffect(() => {
+    if (isLoading) {
+      console.log("Loading");
+    } else {
+      console.log('done loading')
+      const prevData = transactionDetail.items.map((item) => {
+        return {
+          ...item,
+          id: item.product__id,
+          code: item.product__code,
+          brand__name: item.product__brnad__name,
+          quantity: convertToPositive(item.quantity),
+          description: item.product__description,
+          variant: item.product__variant,
+          price: item.price,
+          item_condition: item.item_condition__name,
+        };
+      });
+      setCart(prevData);
+    }
+  }, []);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -119,7 +131,7 @@ function UpdateTransaction() {
             item_condition: selectedCondition.value.name,
             quantity: quantity.value,
           };
-          setCart([newProduct, ...cart])
+          setCart([newProduct, ...cart]);
           selectedItemcode.value = "";
           quantity.value = "";
           clearItemcode.value = true;
@@ -153,13 +165,17 @@ function UpdateTransaction() {
     };
 
     if (!cart.length < 1) {
-      addTransactionMutation.mutate(postData);
+      console.log('before passing the token', token)
+      const newData = {...postData, token: token}
+      addTransactionMutation.mutate(newData);
+      // voidTransaction(transactionToUpdate.value)
+      voidMutation.mutate(transactionToUpdate.value)
     } else {
       toast.error("No Product selected to process this transaction");
     }
   };
 
-  console.log(transactionDetail);
+  console.log(cart);
 
   return (
     <div className="flex-1 flex flex-col gap-4">
@@ -183,7 +199,7 @@ function UpdateTransaction() {
           type="text"
           placeholder="Remarks"
           ref={remarksRef}
-          className="px-2 py-1 rounded-md"
+          className="px-2 py-1 rounded-md bg-white"
         />
         <div className="flex items-center gap-2">
           <div
@@ -213,7 +229,7 @@ function UpdateTransaction() {
         <input
           type="number"
           placeholder="Quantity"
-          className="px-2 py-1 rounded-md"
+          className="px-2 py-1 rounded-md bg-white"
           onKeyDown={addtocart}
           value={quantity.value}
           onChange={(e) => (quantity.value = e.target.value)}
@@ -244,7 +260,12 @@ function UpdateTransaction() {
           </thead>
           <tbody>
             {cart.map((obj) => (
-              <TransactionItem key={obj.code} data={obj} cart={cart} setCart={setCart} />
+              <TransactionItem
+                key={obj.code}
+                data={obj}
+                cart={cart}
+                setCart={setCart}
+              />
             ))}
           </tbody>
         </table>

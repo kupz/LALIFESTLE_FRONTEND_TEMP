@@ -16,9 +16,10 @@ function Dropdown({ options, selectedValue, placeholderValue }) {
         <input
           type="text"
           placeholder={placeholderValue}
-          className="py-1 rounded-md"
+          className="py-1 rounded-md bg-transparent"
           value={inputValue}
           onChange={() => console.log("nice")}
+     
         />
         <p onClick={handleClick} className="cursor-pointer">
           🔽

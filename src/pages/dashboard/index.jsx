@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import useCheckuser from "../../hooks/useToken";
+// import useCheckuser from "../../hooks/useToken";
 import useLogout from "../../hooks/useLogout";
 import TransactionDetailModal from "../../components/TransactionDetailModal";
 import { signal } from "@preact/signals-react";
@@ -11,12 +11,12 @@ export const TransactionDetailViewModal = signal(false);
 
 function Dashboard() {
   useSignals();
-  // const [cookies, removeCookie] = useCookies(["account"]);
+  const [cookies, removeCookie] = useCookies(["account"]);
 
   const handleLogout = useLogout();
 
-  const result = useCheckuser();
-  // console.log(result);
+  const username = cookies.account.user.username
+  console.log(username);
   return (
     <main className="bg-cyan-800 min-h-screen w-full flex">
       <nav className="flex flex-col h-screen gap-5 p-5 overflow-y-auto">
@@ -136,7 +136,7 @@ function Dashboard() {
           <p className="text-white/15 border-gray-400/30 text-xs border-b">
             user
           </p>
-          <p className={`font-bold text-white/30 text-sm`}>Admin</p>
+          <p className={`font-bold text-white/30 text-sm`}>{username}</p>
           <button
             className={`font-bold text-white/20 text-xs`}
             onClick={handleLogout}
